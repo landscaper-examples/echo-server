@@ -1,0 +1,8 @@
+---
+name: echo-server-image
+type: ociImage
+relation: local
+access:
+  type: ociRegistry
+  imageReference: ${IMAGE}:${IMAGE_TAG}
+---
