@@ -1,0 +1,35 @@
+apiVersion: landscaper.gardener.cloud/v1alpha1
+kind: Installation
+metadata:
+  name: echo-server
+
+spec:
+
+  componentDescriptor:
+    ref:
+      repositoryContext:
+        type: ociRegistry
+        baseUrl: ghcr.io/landscaper-examples/components
+      componentName: github.com/landscaper-examples/echo-server
+      version: v0.1.0-dev
+  blueprint:
+    ref:
+      resourceName: echo-server-blueprint
+
+  imports:
+    targets:
+    - name: cluster
+      target: "#my-cluster"
+    data:
+    - name: namespacedName
+      configMapRef:
+        name: my-imports
+        key: namespacedName
+    - name: text
+      configMapRef:
+        name: my-imports
+        key: text
+    - name: host
+      configMapRef:
+        name: my-imports
+        key: host

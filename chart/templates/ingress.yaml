@@ -1,0 +1,31 @@
+{{ if .Values.host }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    dns.gardener.cloud/class: garden
+    {{ if .Values.enableCertificates }}
+    cert.gardener.cloud/purpose: managed
+    {{ end }}
+spec:
+  rules:
+  - host: {{ .Values.host }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}
+            port:
+              number: {{ .Values.port }}
+
+  {{ if .Values.enableCertificates }}
+  tls:
+  - hosts:
+    - {{ .Values.host }}
+    secretName: {{ .Release.Name }}-cert
+  {{ end }}
+{{ end }}

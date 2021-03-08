@@ -6,3 +6,19 @@ access:
   type: ociRegistry
   imageReference: ${IMAGE}:${IMAGE_TAG}
 ---
+name: echo-server-chart
+type: helm.io/chart
+relation: local
+access:
+  type: ociRegistry
+  imageRefence: ${HELM_CHART_REF}:${IMAGE_TAG}
+---
+name: echo-server-blueprint
+type: landscaper.gardener.cloud/blueprint
+relation: local
+input:
+  type: "dir"
+  path: "./blueprint"
+  compress: true
+  mediaType: "application/vnd.gardener.landscaper.blueprint.v1+tar+gzip"
+---
