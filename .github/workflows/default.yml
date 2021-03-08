@@ -2,7 +2,7 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  head-update:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -25,13 +25,30 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: install-prerequisites
+        env:
+          HELM_EXPERIMENTAL_OCI: "1"
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          docker login -u actions -p $GITHUB_TOKEN ghcr.io
+          helm registry login -u actions -p $GITHUB_TOKEN ghcr.io
+
+          curl -L https://github.com/gardener/component-cli/releases/download/$(curl -s https://api.github.com/repos/gardener/component-cli/releases/latest | jq -r '.tag_name')/componentcli-linux-amd64.gz | gzip -d > ./component-cli
+          chmod +x ./component-cli
+          sudo mv ./component-cli /usr/local/bin/component-cli
+          component-cli version
+
       # Runs a single command using the runners shell
       - name: Build
+        env:
+          HELM_EXPERIMENTAL_OCI: "1"
         run: |
           make build-all
 
       # Runs a set of commands using the runners shell
       - name: Push
+        env:
+          REPOSITORY_CONTEXT_URL: "ghcr.io/landscaper-examples"
         run: |
-          component-cli ctf push ./gen/component.ctf
-          echo test, and deploy your project.
+          component-cli ctf push ./gen/component.ctf --repo-ctx=$REPOSITORY_CONTEXT_URL

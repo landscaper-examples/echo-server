@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-imports
+data:
+  namespacedName: |
+    name: my-echo-server
+    namespace: default
+  text: "this is an echo-server deployed by a blueprint"
+  host: "echo-server.ts-test.core.shoot.canary.k8s-hana.ondemand.com"

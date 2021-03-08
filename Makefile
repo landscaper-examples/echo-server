@@ -7,7 +7,7 @@ IMAGEORG                    := landscaper-examples
 IMAGE_PREFIX                := $(REGISTRY)$(IMAGEORG)
 IMAGE                       := $(IMAGE_PREFIX)/$(NAME)
 HELM_CHART_REF              := $(IMAGE_PREFIX)/helm/$(NAME)
-REPOSITORY_CONTEXT          := $(IMAGE_PREFIX)/components
+REPOSITORY_CONTEXT          := $(IMAGE_PREFIX)
 REPO_ROOT                   := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 VERSION                     := $(shell cat "$(REPO_ROOT)/VERSION")
 COMMIT                      := $(shell git rev-parse HEAD)
@@ -20,9 +20,9 @@ ifeq ($(RELEASE),true)
 IMAGE_TAG                   := $(VERSION)
 else
 ifeq ($(QUALIFIER),)
-IMAGE_TAG                   := $(VERSION)-dev
+IMAGE_TAG                   := $(VERSION)
 else
-IMAGE_TAG                   := $(VERSION)-$(QUALIFIER)
+IMAGE_TAG                   := $(VERSION)-$(QUALIFIER)-$(COMMIT)
 endif
 endif
 VERSION_VAR                 := main.version
