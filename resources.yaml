@@ -11,7 +11,7 @@ type: helm.io/chart
 relation: local
 access:
   type: ociRegistry
-  imageRefence: ${HELM_CHART_REF}:${IMAGE_TAG}
+  imageReference: ${HELM_CHART_REF}:${IMAGE_TAG}
 ---
 name: echo-server-blueprint
 type: landscaper.gardener.cloud/blueprint

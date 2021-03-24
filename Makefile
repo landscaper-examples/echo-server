@@ -8,6 +8,7 @@ IMAGE_PREFIX                := $(REGISTRY)$(IMAGEORG)
 IMAGE                       := $(IMAGE_PREFIX)/$(NAME)
 HELM_CHART_REF              := $(IMAGE_PREFIX)/helm/$(NAME)
 REPOSITORY_CONTEXT          := $(IMAGE_PREFIX)
+HELM_REPOSITORY             := gen/helm
 REPO_ROOT                   := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 VERSION                     := $(shell cat "$(REPO_ROOT)/VERSION")
 COMMIT                      := $(shell git rev-parse HEAD)
@@ -54,7 +55,7 @@ image-push-release: image-release
 
 .PHONY: helm
 helm:
-	HELM_EXPERIMENTAL_OCI=1 helm chart save ./chart $(HELM_CHART_REF):$(VERSION)
+	HELM_EXPERIMENTAL_OCI=1 HELM_CACHE_HOME=$(HELM_REPOSITORY) helm chart save ./chart $(HELM_CHART_REF):$(VERSION)
 
 .PHONY: helm-push
 helm-push: helm

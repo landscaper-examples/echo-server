@@ -62,7 +62,7 @@ deployExecutions:
           {{ if .imports.host }}
           host: {{ .imports.host }}
           {{ end }}
-          {{ if .imports.host }}
+          {{ if .imports.enableCertificates }}
           enableCertificates: {{ .imports.enableCertificates }}
           {{ end }}
 

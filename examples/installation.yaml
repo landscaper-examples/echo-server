@@ -9,7 +9,7 @@ spec:
     ref:
       repositoryContext:
         type: ociRegistry
-        baseUrl: ghcr.io/landscaper-examples/components
+        baseUrl: ghcr.io/landscaper-examples
       componentName: github.com/landscaper-examples/echo-server
       version: v0.1.0-dev
   blueprint:
